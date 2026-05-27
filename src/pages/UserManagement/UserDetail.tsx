@@ -49,6 +49,7 @@ export function UserDetails() {
     }, [statusOpen]);
 
     const user = users.find((u) => u.id === id);
+    // store.find gives a reactive reference — any updateUser call re-renders this component
 
     if (!user) {
         return (
@@ -64,7 +65,7 @@ export function UserDetails() {
     const metricCards = [
         {
             label: 'Total Orders',
-            value: user.totalOrders,
+            value: user.orders.length,
             icon: <ShoppingBag className="w-5 h-5 text-teal-600" />,
             bg: 'bg-teal-50',
         },
@@ -75,8 +76,9 @@ export function UserDetails() {
             bg: 'bg-[#F0FDF4]',
         },
         {
+            // Derived live from familyMembers array — updates immediately on add/delete
             label: 'Total Family Member',
-            value: user.totalFamilyMembers,
+            value: user.familyMembers.length,
             icon: <Users className="w-5 h-5 text-blue-600" />,
             bg: 'bg-blue-50',
         },

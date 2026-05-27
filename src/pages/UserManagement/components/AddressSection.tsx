@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, Plus, Pencil, Trash2, X, Check } from 'lucide-react';
+import { Home, Plus, Pencil, Trash2, X, Check, AlertTriangle } from 'lucide-react';
 import { useUserStore } from '../../../store/useUserStore';
 import { Badge } from '../../../components/ui/Badge';
 import type { User, Address } from '../../../types';
@@ -8,14 +8,27 @@ interface AddressSectionProps {
   user: User;
 }
 
-const INPUT_CLS = 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2 text-gray-900 ' +
+const INPUT_CLS =
+  'w-full text-sm border border-gray-200 rounded-lg px-3 py-2 text-gray-900 ' +
   'focus:outline-none focus:ring-2 focus:ring-[#2D7A3A]/20 focus:border-[#2D7A3A]';
 
 const BLANK_FORM = {
   type: 'Home' as Address['type'],
   isDefault: false,
-  line1: '', city: '', state: '', pincode: '', country: 'India',
+  line1: '',
+  city: '',
+  state: '',
+  pincode: '',
+  country: 'India',
 };
+
+const STATES = [
+  'Andhra Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana',
+  'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra',
+  'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan',
+  'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand',
+  'West Bengal', 'Delhi', 'Jammu & Kashmir', 'Ladakh',
+];
 
 function AddressForm({
   initial,
@@ -31,59 +44,70 @@ function AddressForm({
     setForm((p) => ({ ...p, [k]: v }));
 
   return (
-    <div className="mt-3 p-4 border border-[#2D7A3A]/20 rounded-xl bg-[#F0FDF4]/40 space-y-3">
+    <div className="mt-3 p-4 border border-[#2D7A3A]/20 rounded-xl bg-[#F0FDF4]/40 space-y-3 animate-in fade-in duration-150">
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="text-xs font-medium text-gray-500 mb-1 block">Type</label>
-          <select className={INPUT_CLS} value={form.type}
-            onChange={(e) => f('type', e.target.value as Address['type'])}>
+          <select className={INPUT_CLS} value={form.type} onChange={(e) => f('type', e.target.value as Address['type'])}>
             <option>Home</option><option>Work</option><option>Other</option>
           </select>
         </div>
         <div className="flex items-end gap-2">
           <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
-            <input type="checkbox" checked={form.isDefault}
-              onChange={(e) => f('isDefault', e.target.checked)}
-              className="accent-[#2D7A3A]" />
+            <input type="checkbox" checked={form.isDefault} onChange={(e) => f('isDefault', e.target.checked)} className="accent-[#2D7A3A]" />
             Set as default
           </label>
         </div>
         <div className="col-span-2">
           <label className="text-xs font-medium text-gray-500 mb-1 block">Address Line</label>
-          <input className={INPUT_CLS} value={form.line1}
-            onChange={(e) => f('line1', e.target.value)} placeholder="Flat / Building / Street" />
+          <input className={INPUT_CLS} value={form.line1} onChange={(e) => f('line1', e.target.value)} placeholder="Flat / Building / Street" />
         </div>
         <div>
           <label className="text-xs font-medium text-gray-500 mb-1 block">City</label>
-          <input className={INPUT_CLS} value={form.city}
-            onChange={(e) => f('city', e.target.value)} placeholder="City" />
+          <input className={INPUT_CLS} value={form.city} onChange={(e) => f('city', e.target.value)} placeholder="City" />
         </div>
         <div>
           <label className="text-xs font-medium text-gray-500 mb-1 block">State</label>
-          <input className={INPUT_CLS} value={form.state}
-            onChange={(e) => f('state', e.target.value)} placeholder="State" />
+          <select className={INPUT_CLS} value={form.state} onChange={(e) => f('state', e.target.value)}>
+            <option value="">Select state…</option>
+            {STATES.map((s) => <option key={s}>{s}</option>)}
+          </select>
         </div>
         <div>
           <label className="text-xs font-medium text-gray-500 mb-1 block">Pin Code</label>
-          <input className={INPUT_CLS} value={form.pincode}
-            onChange={(e) => f('pincode', e.target.value)} placeholder="000000" maxLength={6} />
+          <input className={INPUT_CLS} value={form.pincode} onChange={(e) => f('pincode', e.target.value)} placeholder="000000" maxLength={6} />
         </div>
         <div>
           <label className="text-xs font-medium text-gray-500 mb-1 block">Country</label>
-          <input className={INPUT_CLS} value={form.country}
-            onChange={(e) => f('country', e.target.value)} />
+          <input className={INPUT_CLS} value={form.country} onChange={(e) => f('country', e.target.value)} />
         </div>
       </div>
       <div className="flex justify-end gap-2">
-        <button onClick={onCancel}
-          className="flex items-center gap-1 text-xs font-medium text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50">
+        <button
+          onClick={onCancel}
+          className="flex items-center gap-1 text-xs font-medium text-gray-400 hover:text-gray-600 px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50"
+        >
           <X className="w-3.5 h-3.5" /> Cancel
         </button>
-        <button onClick={() => onSave(form)}
-          className="flex items-center gap-1 text-xs font-medium text-white px-3 py-1.5 rounded-lg bg-[#2D7A3A] hover:bg-[#256832]">
+        <button
+          onClick={() => onSave(form)}
+          className="flex items-center gap-1 text-xs font-medium text-white px-3 py-1.5 rounded-lg bg-[#2D7A3A] hover:bg-[#256832]"
+        >
           <Check className="w-3.5 h-3.5" /> Save
         </button>
       </div>
+    </div>
+  );
+}
+
+/** Inline confirm bar — replaces the action buttons temporarily */
+function DeleteConfirm({ label, onConfirm, onCancel }: { label: string; onConfirm: () => void; onCancel: () => void }) {
+  return (
+    <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-xs animate-in fade-in duration-150">
+      <AlertTriangle className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
+      <span className="text-red-700 flex-1">{label}</span>
+      <button onClick={onCancel} className="text-gray-500 hover:text-gray-700 font-medium px-2 py-0.5 rounded">No</button>
+      <button onClick={onConfirm} className="text-white bg-red-500 hover:bg-red-600 font-semibold px-2 py-0.5 rounded">Yes, delete</button>
     </div>
   );
 }
@@ -92,6 +116,12 @@ export function AddressSection({ user }: AddressSectionProps) {
   const { addAddress, updateAddress, deleteAddress } = useUserStore();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+
+  const handleDelete = (addrId: string) => {
+    deleteAddress(user.id, addrId);
+    setConfirmDeleteId(null);
+  };
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-5">
@@ -106,17 +136,16 @@ export function AddressSection({ user }: AddressSectionProps) {
         </button>
       </div>
 
+      {/* Add form */}
       {showAddForm && (
         <AddressForm
           initial={BLANK_FORM}
-          onSave={(data) => {
-            addAddress(user.id, data);
-            setShowAddForm(false);
-          }}
+          onSave={(data) => { addAddress(user.id, data); setShowAddForm(false); }}
           onCancel={() => setShowAddForm(false)}
         />
       )}
 
+      {/* Address list */}
       <div className="space-y-3 mt-2">
         {user.addresses.length === 0 && (
           <p className="text-xs text-gray-400 text-center py-4">No addresses added.</p>
@@ -139,27 +168,37 @@ export function AddressSection({ user }: AddressSectionProps) {
               <div className="flex items-center gap-1 flex-shrink-0">
                 <button
                   id={`btn-edit-addr-${addr.id}`}
-                  onClick={() => setEditId(editId === addr.id ? null : addr.id)}
+                  onClick={() => { setEditId(editId === addr.id ? null : addr.id); setConfirmDeleteId(null); }}
                   className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <Pencil className="w-3.5 h-3.5" />
                 </button>
                 <button
                   id={`btn-delete-addr-${addr.id}`}
-                  onClick={() => deleteAddress(user.id, addr.id)}
+                  onClick={() => { setConfirmDeleteId(addr.id); setEditId(null); }}
                   className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-gray-400 hover:text-[#DC2626] transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
+
+            {/* Inline delete confirm */}
+            {confirmDeleteId === addr.id && (
+              <div className="mt-1.5">
+                <DeleteConfirm
+                  label="Delete this address?"
+                  onConfirm={() => handleDelete(addr.id)}
+                  onCancel={() => setConfirmDeleteId(null)}
+                />
+              </div>
+            )}
+
+            {/* Inline edit form */}
             {editId === addr.id && (
               <AddressForm
                 initial={{ type: addr.type, isDefault: addr.isDefault, line1: addr.line1, city: addr.city, state: addr.state, pincode: addr.pincode, country: addr.country }}
-                onSave={(data) => {
-                  updateAddress(user.id, addr.id, data);
-                  setEditId(null);
-                }}
+                onSave={(data) => { updateAddress(user.id, addr.id, data); setEditId(null); }}
                 onCancel={() => setEditId(null)}
               />
             )}

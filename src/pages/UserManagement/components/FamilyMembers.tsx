@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Phone, Calendar, Pencil, Trash2, Users } from 'lucide-react';
+import { Plus, Phone, Calendar, Pencil, Trash2, Users, AlertTriangle } from 'lucide-react';
 import { useUserStore } from '../../../store/useUserStore';
 import { Badge } from '../../../components/ui/Badge';
 import { Modal } from '../../../components/ui/Modal';
@@ -10,11 +10,19 @@ interface FamilyMembersProps {
     user: User;
 }
 
-const INPUT_CLS = 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2 text-gray-900 ' +
+const INPUT_CLS =
+    'w-full text-sm border border-gray-200 rounded-lg px-3 py-2 text-gray-900 ' +
     'focus:outline-none focus:ring-2 focus:ring-[#2D7A3A]/20 focus:border-[#2D7A3A]';
 
 const BLANK = { name: '', relation: '', phone: '', dob: '', gender: 'Female' as Gender };
 
+// Same palette as Avatar.tsx for consistent hashing
+const AVATAR_COLORS = [
+    'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-teal-500', 'bg-orange-500',
+];
+function getAvatarColor(name: string) {
+    return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+}
 function getInitials(name: string) {
     return name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
 }
@@ -36,12 +44,16 @@ function MemberForm({ initial, onSave, onClose, title }: MemberFormProps) {
             <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Name <span className="text-red-400">*</span></label>
+                        <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                            Name <span className="text-red-400">*</span>
+                        </label>
                         <input required className={INPUT_CLS} value={form.name}
                             onChange={(e) => f('name', e.target.value)} placeholder="Full name" />
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Relationship <span className="text-red-400">*</span></label>
+                        <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                            Relationship <span className="text-red-400">*</span>
+                        </label>
                         <input required className={INPUT_CLS} value={form.relation}
                             onChange={(e) => f('relation', e.target.value)} placeholder="e.g. Son, Wife" />
                     </div>
@@ -67,6 +79,7 @@ function MemberForm({ initial, onSave, onClose, title }: MemberFormProps) {
                     <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
                     <Button
                         type="button" variant="primary"
+                        id={`btn-save-member-${title === 'Add Family Member' ? 'add' : 'edit'}`}
                         onClick={() => { if (form.name && form.relation) onSave(form); }}
                     >
                         Save
@@ -77,16 +90,34 @@ function MemberForm({ initial, onSave, onClose, title }: MemberFormProps) {
     );
 }
 
+/** Compact inline delete confirmation */
+function DeleteConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
+    return (
+        <div className="flex items-center gap-2 mt-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-xs">
+            <AlertTriangle className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
+            <span className="text-red-700 flex-1">Remove this member?</span>
+            <button onClick={onCancel} className="text-gray-500 hover:text-gray-700 font-medium px-2 py-0.5 rounded">No</button>
+            <button onClick={onConfirm} className="text-white bg-red-500 hover:bg-red-600 font-semibold px-2 py-0.5 rounded">Yes</button>
+        </div>
+    );
+}
+
 export function FamilyMembers({ user }: FamilyMembersProps) {
     const { addFamilyMember, updateFamilyMember, deleteFamilyMember, users } = useUserStore();
     const [addOpen, setAddOpen] = useState(false);
     const [editMember, setEditMember] = useState<FamilyMember | null>(null);
+    const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
+    // Always read from store for reactivity (totalFamilyMembers updates via store)
     const liveUser = users.find((u) => u.id === user.id) ?? user;
 
-    const fmtDob = (d: string) => d
-        ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-        : '—';
+    const fmtDob = (d: string) =>
+        d ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+
+    const handleDelete = (memberId: string) => {
+        deleteFamilyMember(user.id, memberId);
+        setConfirmDeleteId(null);
+    };
 
     return (
         <div className="space-y-4">
@@ -114,51 +145,58 @@ export function FamilyMembers({ user }: FamilyMembersProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {liveUser.familyMembers.map((m) => (
-                    <div
-                        key={m.id}
-                        id={`member-card-${m.id}`}
-                        className="bg-white border border-gray-200 rounded-2xl p-4 flex items-start gap-3"
-                    >
+                    <div key={m.id} id={`member-card-${m.id}`} className="bg-white border border-gray-200 rounded-2xl p-4">
+                        <div className="flex items-start gap-3">
 
-                        <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                            {getInitials(m.name)}
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <p className="text-sm font-semibold text-gray-800 truncate">{m.name}</p>
-                                <Badge variant="gray">{m.relation}</Badge>
+                            <div
+                                className={`w-10 h-10 rounded-full ${getAvatarColor(m.name)} flex items-center justify-center text-white text-xs font-bold flex-shrink-0 select-none`}
+                            >
+                                {getInitials(m.name)}
                             </div>
-                            {m.phone && (
-                                <div className="flex items-center gap-1.5 mt-1.5">
-                                    <Phone className="w-3 h-3 text-gray-400" />
-                                    <span className="text-xs text-gray-600">{m.phone}</span>
+
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <p className="text-sm font-semibold text-gray-800 truncate">{m.name}</p>
+                                    <Badge variant="gray">{m.relation}</Badge>
                                 </div>
-                            )}
-                            {m.dob && (
-                                <div className="flex items-center gap-1.5 mt-1">
-                                    <Calendar className="w-3 h-3 text-gray-400" />
-                                    <span className="text-xs text-gray-600">{fmtDob(m.dob)}</span>
-                                </div>
-                            )}
+                                {m.phone && (
+                                    <div className="flex items-center gap-1.5 mt-1.5">
+                                        <Phone className="w-3 h-3 text-gray-400" />
+                                        <span className="text-xs text-gray-600">{m.phone}</span>
+                                    </div>
+                                )}
+                                {m.dob && (
+                                    <div className="flex items-center gap-1.5 mt-1">
+                                        <Calendar className="w-3 h-3 text-gray-400" />
+                                        <span className="text-xs text-gray-600">{fmtDob(m.dob)}</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex items-center gap-1 flex-shrink-0">
+                                <button
+                                    id={`btn-edit-member-${m.id}`}
+                                    onClick={() => { setEditMember(m); setConfirmDeleteId(null); }}
+                                    className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    <Pencil className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                    id={`btn-delete-member-${m.id}`}
+                                    onClick={() => setConfirmDeleteId(confirmDeleteId === m.id ? null : m.id)}
+                                    className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-gray-400 hover:text-[#DC2626] transition-colors"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                            </div>
                         </div>
 
-                        <div className="flex items-center gap-1 flex-shrink-0">
-                            <button
-                                id={`btn-edit-member-${m.id}`}
-                                onClick={() => setEditMember(m)}
-                                className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
-                            >
-                                <Pencil className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                                id={`btn-delete-member-${m.id}`}
-                                onClick={() => deleteFamilyMember(user.id, m.id)}
-                                className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-gray-400 hover:text-[#DC2626] transition-colors"
-                            >
-                                <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                        </div>
+                        {confirmDeleteId === m.id && (
+                            <DeleteConfirm
+                                onConfirm={() => handleDelete(m.id)}
+                                onCancel={() => setConfirmDeleteId(null)}
+                            />
+                        )}
                     </div>
                 ))}
             </div>
@@ -167,10 +205,7 @@ export function FamilyMembers({ user }: FamilyMembersProps) {
                 <MemberForm
                     title="Add Family Member"
                     initial={BLANK}
-                    onSave={(data) => {
-                        addFamilyMember(user.id, data);
-                        setAddOpen(false);
-                    }}
+                    onSave={(data) => { addFamilyMember(user.id, data); setAddOpen(false); }}
                     onClose={() => setAddOpen(false)}
                 />
             )}
@@ -185,10 +220,7 @@ export function FamilyMembers({ user }: FamilyMembersProps) {
                         dob: editMember.dob,
                         gender: editMember.gender ?? 'Female',
                     }}
-                    onSave={(data) => {
-                        updateFamilyMember(user.id, editMember.id, data);
-                        setEditMember(null);
-                    }}
+                    onSave={(data) => { updateFamilyMember(user.id, editMember.id, data); setEditMember(null); }}
                     onClose={() => setEditMember(null)}
                 />
             )}
