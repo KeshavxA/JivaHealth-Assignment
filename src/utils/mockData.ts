@@ -1,4 +1,23 @@
-import type { User, Appointment, Order } from '../types';
+// Local types for legacy dashboard/appointments/orders pages.
+// These are NOT the canonical types — see src/types/index.ts for the new spec.
+interface LegacyFamilyMember {
+  id: string; name: string; relation: string; age: number; status: string; avatar: string;
+}
+interface LegacyUser {
+  id: string; name: string; email: string; phone: string; status: string; plan: string;
+  role: string; avatar: string; dateJoined: string; lastActive: string; city: string;
+  state: string; bloodGroup: string; age: number; gender: string; appointmentCount: number;
+  totalSpend: number; notes?: string; familyMembers: LegacyFamilyMember[];
+}
+interface Appointment {
+  id: string; userId: string; userName: string; doctorName: string; doctorSpecialty: string;
+  type: string; status: string; date: string; time: string; notes?: string; location?: string;
+}
+interface Order {
+  id: string; userId: string; userName: string; itemName: string; amount: number;
+  status: string; paymentMethod: string; date: string; invoiceNumber: string;
+}
+type User = LegacyUser;
 
 const avatar = (name: string, bg: string, color: string = 'ffffff') =>
   `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${bg}&color=${color}&bold=true&size=128`;

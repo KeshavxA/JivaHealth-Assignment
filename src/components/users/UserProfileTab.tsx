@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { Save, Edit2, X } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { Card } from '../shared/Card';
-import type { User } from '../../types';
+
+// Legacy interface matching the old store's user shape
+interface User {
+  id: string; name: string; email: string; phone: string; city: string; state: string;
+  bloodGroup?: string; age: number; gender: string; notes?: string; dateJoined: string; lastActive: string;
+}
 
 interface Props {
   user: User;

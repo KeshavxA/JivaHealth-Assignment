@@ -1,6 +1,11 @@
 import { create } from 'zustand';
-import type { User, Appointment, Order, FamilyMember } from '../types';
 import { MOCK_USERS, MOCK_APPOINTMENTS, MOCK_ORDERS } from '../utils/mockData';
+
+// Legacy local types — NOT the same as canonical src/types/index.ts
+interface FamilyMember { id: string; name: string; relation: string; age: number; status: string; avatar: string; }
+interface User { id: string; name: string; email: string; phone: string; status: string; plan: string; role: string; avatar: string; dateJoined: string; lastActive: string; city: string; state: string; bloodGroup: string; age: number; gender: string; appointmentCount: number; totalSpend: number; notes?: string; familyMembers: FamilyMember[]; }
+interface Appointment { id: string; userId: string; userName: string; doctorName: string; doctorSpecialty: string; type: string; status: string; date: string; time: string; notes?: string; location?: string; }
+interface Order { id: string; userId: string; userName: string; itemName: string; amount: number; status: string; paymentMethod: string; date: string; invoiceNumber: string; }
 
 interface AppState {
 

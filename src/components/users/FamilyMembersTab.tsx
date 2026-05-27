@@ -4,7 +4,12 @@ import { useStore } from '../../store/useStore';
 import { Card } from '../shared/Card';
 import { Badge } from '../shared/Badge';
 import { Modal } from '../shared/Modal';
-import type { User, FamilyMember, Relation, UserStatus } from '../../types';
+
+// Legacy local types — isolated from canonical src/types/index.ts
+type Relation = 'spouse' | 'child' | 'parent' | 'sibling' | 'other';
+type UserStatus = 'active' | 'inactive';
+interface FamilyMember { id: string; name: string; relation: string; age: number; status: string; avatar: string; }
+interface User { id: string; familyMembers: FamilyMember[]; }
 
 interface Props { user: User; }
 
@@ -45,7 +50,7 @@ export function FamilyMembersTab({ user }: Props) {
 
   const openEdit = (fm: FamilyMember) => {
     setEditMember(fm);
-    setForm({ name: fm.name, relation: fm.relation, age: String(fm.age), status: fm.status });
+    setForm({ name: fm.name, relation: fm.relation as Relation, age: String(fm.age), status: fm.status as UserStatus });
   };
 
   const FamilyForm = ({ onSubmit, submitLabel }: { onSubmit: (e: React.FormEvent) => void; submitLabel: string }) => (

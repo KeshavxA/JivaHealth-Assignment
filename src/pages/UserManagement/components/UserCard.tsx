@@ -1,71 +1,109 @@
-import { Eye, Trash2 } from 'lucide-react';
+
 import { useNavigate } from 'react-router-dom';
+import { Mail, Phone, Calendar, Eye, Pencil, Crown } from 'lucide-react';
 import { Badge } from '../../../components/ui/Badge';
 import { Avatar } from '../../../components/ui/Avatar';
 import type { User } from '../../../types';
 
 interface UserCardProps {
   user: User;
-  onDelete: (id: string) => void;
+  onEdit: (user: User) => void;
+  onUpgrade: (id: string) => void;
 }
 
-export function UserCard({ user, onDelete }: UserCardProps) {
+function fmt(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-IN', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+  });
+}
+
+export function UserCard({ user, onEdit, onUpgrade }: UserCardProps) {
   const navigate = useNavigate();
 
   return (
     <div
       id={`user-card-${user.id}`}
-      className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex flex-col items-center text-center
-        hover:shadow-md hover:border-gray-300 transition-all duration-200"
+      className="bg-white border border-gray-200 rounded-2xl px-5 py-4 flex items-center gap-5
+        hover:shadow-sm hover:border-gray-300 transition-all duration-200"
     >
-      <div className="relative mb-3">
-        <Avatar
-          src={user.avatar}
-          name={user.name}
-          size="lg"
-          shape="rounded"
-          statusDot={user.status}
-        />
+
+      <div className="flex-shrink-0">
+        <Avatar name={user.name} size="lg" shape="circle" statusDot={user.status === 'Active' ? 'active' : 'inactive'} />
       </div>
 
-      <p className="font-semibold text-gray-900 text-sm">{user.name}</p>
-      <p className="text-xs text-gray-400 mt-0.5 mb-2">{user.city}, {user.state}</p>
-
-      <div className="flex items-center gap-1.5 flex-wrap justify-center mb-3">
-        <Badge variant={user.status} dot />
-        {user.plan === 'premium' && <Badge variant="premium" label="Pro" />}
-        {user.role === 'admin' && <Badge variant="admin" />}
+      <div className="w-[180px] flex-shrink-0">
+        <p className="font-semibold text-gray-900 text-sm leading-tight truncate">{user.name}</p>
+        <div className="flex items-center gap-1 mt-1 flex-wrap">
+          <Badge variant={user.role} />
+        </div>
+        <div className="flex items-center gap-1 mt-1 flex-wrap">
+          <Badge variant={user.status} dot />
+        </div>
+        <p className="text-xs text-gray-400 mt-1">{user.tier}</p>
       </div>
 
-      <div className="w-full border-t border-gray-100 pt-3 grid grid-cols-2 gap-2 text-center mb-3">
+      <div className="flex-1 min-w-0 space-y-1">
+        <div className="flex items-center gap-2 text-xs text-gray-600">
+          <Mail className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+          <span className="truncate">{user.email}</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-gray-600">
+          <Phone className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+          <span>{user.phone}</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-gray-400">
+          <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
+          <span>Last: {fmt(user.lastActive)}</span>
+        </div>
+      </div>
+
+      <div className="w-[120px] flex-shrink-0 text-center space-y-2">
         <div>
-          <p className="text-lg font-bold text-[#16A34A]">{user.appointmentCount}</p>
+          <p className="text-xs text-gray-400">Joined</p>
+          <p className="text-xs font-medium text-gray-700 mt-0.5">{fmt(user.joinedDate)}</p>
+        </div>
+        <div>
           <p className="text-xs text-gray-400">Appointments</p>
-        </div>
-        <div>
-          <p className="text-lg font-bold text-gray-900">₹{(user.totalSpend / 1000).toFixed(1)}k</p>
-          <p className="text-xs text-gray-400">Spend</p>
+          <p className="text-lg font-bold text-[#2D7A3A]">{user.appointments}</p>
         </div>
       </div>
 
-      <div className="flex gap-2 w-full">
-        <button
-          id={`btn-grid-view-${user.id}`}
-          onClick={() => navigate(`/users/${user.id}`)}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold text-[#2D7A3A]
-            rounded-lg border border-[#2D7A3A]/30 hover:bg-[#F0FDF4] transition-colors"
-        >
-          <Eye className="w-3.5 h-3.5" /> View
-        </button>
-        <button
-          id={`btn-grid-delete-${user.id}`}
-          onClick={() => onDelete(user.id)}
-          className="flex items-center justify-center p-2 text-gray-400 hover:text-[#DC2626]
-            hover:bg-red-50 rounded-lg border border-gray-200 hover:border-red-100 transition-colors"
-          title="Delete user"
-        >
-          <Trash2 className="w-3.5 h-3.5" />
-        </button>
+      <div className="flex flex-col gap-2 flex-shrink-0 items-end">
+        {user.tier !== 'Prime User' && (
+          <button
+            id={`btn-upgrade-${user.id}`}
+            onClick={() => onUpgrade(user.id)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white
+              transition-all hover:opacity-90 active:scale-95"
+            style={{ backgroundColor: '#F59E0B' }}
+          >
+            <Crown className="w-3.5 h-3.5" />
+            Upgrade to Prime
+          </button>
+        )}
+        {user.tier === 'Prime User' && (
+          <span className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-100">
+            <Crown className="w-3.5 h-3.5" /> Prime
+          </span>
+        )}
+        <div className="flex items-center gap-2">
+          <button
+            id={`btn-view-${user.id}`}
+            onClick={() => navigate(`/users/${user.id}`)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700
+              border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all"
+          >
+            <Eye className="w-3.5 h-3.5" /> View
+          </button>
+          <button
+            id={`btn-edit-${user.id}`}
+            onClick={() => onEdit(user)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700
+              border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all"
+          >
+            <Pencil className="w-3.5 h-3.5" /> Edit
+          </button>
+        </div>
       </div>
     </div>
   );

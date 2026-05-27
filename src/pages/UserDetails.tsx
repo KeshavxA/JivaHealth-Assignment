@@ -9,8 +9,9 @@ import { UserProfileTab } from '../components/users/UserProfileTab';
 import { FamilyMembersTab } from '../components/users/FamilyMembersTab';
 import { OrdersPaymentsTab } from '../components/users/OrdersPaymentsTab';
 import { AppointmentsTab } from '../components/users/AppointmentsTab';
-import type { TabId } from '../types';
 import clsx from 'clsx';
+
+type TabId = 'profile' | 'family' | 'orders' | 'appointments';
 
 const TABS: { id: TabId; label: string; icon: any }[] = [
   { id: 'profile', label: 'Profile', icon: User },
@@ -193,8 +194,8 @@ export function UserDetails() {
           </div>
 
           <div className="animate-fade-in">
-            {activeTab === 'profile' && <UserProfileTab user={user} />}
-            {activeTab === 'family' && <FamilyMembersTab user={user} />}
+            {activeTab === 'profile' && <UserProfileTab user={user as any} />}
+            {activeTab === 'family' && <FamilyMembersTab user={user as any} />}
             {activeTab === 'orders' && <OrdersPaymentsTab userId={user.id} />}
             {activeTab === 'appointments' && <AppointmentsTab userId={user.id} />}
           </div>

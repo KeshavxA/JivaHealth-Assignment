@@ -5,7 +5,11 @@ import { useStore } from '../store/useStore';
 import { Card } from '../components/shared/Card';
 import { Badge } from '../components/shared/Badge';
 import { Modal } from '../components/shared/Modal';
-import type { User, UserStatus, SubscriptionPlan, UserRole } from '../types';
+
+// Legacy local types (kept for backward compat, not the canonical types)
+type UserStatus = 'active' | 'inactive';
+type SubscriptionPlan = 'free' | 'premium';
+type UserRole = 'user' | 'admin';
 
 type ViewMode = 'list' | 'grid';
 type SortField = 'name' | 'dateJoined' | 'totalSpend' | 'appointmentCount';
@@ -13,7 +17,7 @@ type SortDir = 'asc' | 'desc';
 
 const INITIAL_FORM = {
   name: '', email: '', phone: '', city: '', state: '',
-  age: '', gender: 'female' as User['gender'],
+  age: '', gender: 'female' as 'male' | 'female' | 'other',
   status: 'active' as UserStatus, plan: 'free' as SubscriptionPlan,
   role: 'user' as UserRole, bloodGroup: '', notes: '',
 };
@@ -337,7 +341,7 @@ export function Users() {
               <select
                 id="select-add-gender"
                 value={form.gender}
-                onChange={(e) => setForm({ ...form, gender: e.target.value as User['gender'] })}
+                onChange={(e) => setForm({ ...form, gender: e.target.value as 'male' | 'female' | 'other' })}
                 className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#2D7A3A]/20 focus:border-[#2D7A3A]"
               >
                 <option value="female">Female</option>

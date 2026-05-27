@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import type { UserStatus, AppointmentStatus, OrderStatus } from '../../types';
 
-type BadgeVariant = UserStatus | AppointmentStatus | OrderStatus | 'premium' | 'free' | 'admin' | 'user' | 'telehealth' | 'consultation' | 'checkup' | 'follow-up';
+// Legacy types — this component predates the new types/index.ts
+type BadgeVariant = string;
 
 const VARIANT_STYLES: Record<string, string> = {
   active:       'bg-[#16A34A]/10 text-[#16A34A] border border-[#16A34A]/20',

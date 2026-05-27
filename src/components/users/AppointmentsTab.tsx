@@ -4,7 +4,10 @@ import { useStore } from '../../store/useStore';
 import { Card } from '../shared/Card';
 import { Badge } from '../shared/Badge';
 import { Modal } from '../shared/Modal';
-import type { AppointmentStatus, AppointmentType } from '../../types';
+
+// Legacy local types — no longer importing from types/index.ts
+type AppointmentStatus = 'scheduled' | 'completed' | 'cancelled';
+type AppointmentType = 'consultation' | 'checkup' | 'follow-up' | 'telehealth';
 
 interface Props { userId: string; }
 
@@ -155,7 +158,7 @@ export function AppointmentsTab({ userId }: Props) {
                 className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2D7A3A]/20 focus:border-[#2D7A3A]"
               >
                 {APPT_TYPES.map((t) => (
-                  <option key={t} value={t}>{t.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}</option>
+                  <option key={t} value={t}>{t.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())}</option>
                 ))}
               </select>
             </div>

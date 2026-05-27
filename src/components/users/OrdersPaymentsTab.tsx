@@ -4,7 +4,10 @@ import { useStore } from '../../store/useStore';
 import { Card } from '../shared/Card';
 import { Badge } from '../shared/Badge';
 import { Modal } from '../shared/Modal';
-import type { OrderStatus, PaymentMethod } from '../../types';
+
+// Legacy local types
+type OrderStatus = 'paid' | 'pending' | 'failed' | 'refunded';
+type PaymentMethod = 'credit_card' | 'debit_card' | 'upi' | 'net_banking' | 'cash';
 
 interface Props { userId: string; }
 
@@ -149,7 +152,7 @@ export function OrdersPaymentsTab({ userId }: Props) {
               className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2D7A3A]/20 focus:border-[#2D7A3A]"
             >
               {PAYMENT_METHODS.map((m) => (
-                <option key={m} value={m}>{m.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}</option>
+                <option key={m} value={m}>{m.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())}</option>
               ))}
             </select>
           </div>
