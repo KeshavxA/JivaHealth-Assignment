@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Modal } from '../../../components/ui/Modal';
-import { Button } from '../../../components/ui/Button';
 import { useUserStore } from '../../../store/useUserStore';
 import type { UserRole, UserStatus, UserTier, BloodGroup, Gender } from '../../../types';
 
@@ -18,10 +17,9 @@ const STATES = [
 ];
 
 const BLOOD_GROUPS: BloodGroup[] = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
-const ROLES: UserRole[] = ['Patient', 'Nurse', 'Doctor', 'Support Staff'];
 
-const cls = 'w-full px-3 py-2 text-sm border border-gray-200 rounded-lg text-gray-900 ' +
-  'focus:outline-none focus:ring-2 focus:ring-[#2D7A3A]/20 focus:border-[#2D7A3A] bg-white';
+const cls = 'w-full px-3 py-2 text-[13px] rounded-lg text-gray-900 ' +
+  'bg-[#F3F4F6] border border-transparent focus:outline-none focus:bg-white focus:border-[#2D7A3A] transition-colors';
 
 const INITIAL = {
   name: '', email: '', phone: '', dob: '',
@@ -62,43 +60,45 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Add User" size="xl" id="modal-add-user">
+    <Modal isOpen={isOpen} onClose={onClose} title="Add New User" size="xl" id="modal-add-user">
+      <p className="text-[13px] text-gray-500 mb-5 -mt-3">Create a new user account with role and permissions</p>
       <form onSubmit={handleSubmit} className="space-y-4">
 
         <div className="grid grid-cols-2 gap-4">
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">
-              Full Name <span className="text-red-400">*</span>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">
+              Full Name *
             </label>
             <input id="input-add-name" required type="text" value={form.name}
-              onChange={(e) => f('name', e.target.value)} placeholder="Enter full name" className={cls} />
+              onChange={(e) => f('name', e.target.value)} placeholder="e.g., John Smith" className={cls} />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">
-              Email <span className="text-red-400">*</span>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">
+              Email *
             </label>
             <input id="input-add-email" required type="email" value={form.email}
-              onChange={(e) => f('email', e.target.value)} placeholder="Enter email" className={cls} />
+              onChange={(e) => f('email', e.target.value)} placeholder="john.smith@email.com" className={cls} />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Phone Number</label>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">Phone Number</label>
             <input id="input-add-phone" type="text" value={form.phone}
-              onChange={(e) => f('phone', e.target.value)} placeholder="+91 XXXXX XXXXX" className={cls} />
+              onChange={(e) => f('phone', e.target.value)} placeholder="+91 98765 43210" className={cls} />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Date of Birth</label>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">Date of Birth</label>
             <input id="input-add-dob" type="date" value={form.dob}
               onChange={(e) => f('dob', e.target.value)} className={cls} />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Gender</label>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">Gender</label>
             <select id="select-add-gender" value={form.gender}
               onChange={(e) => f('gender', e.target.value as Gender)} className={cls}>
+              <option value="" disabled>Select gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
@@ -111,69 +111,58 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Blood Group</label>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">Blood Group</label>
             <select id="select-add-blood" value={form.bloodGroup}
               onChange={(e) => f('bloodGroup', e.target.value as BloodGroup)} className={cls}>
+              <option value="" disabled>Select blood group</option>
               {BLOOD_GROUPS.map((bg) => <option key={bg} value={bg}>{bg}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Role</label>
-            <select id="select-add-role" value={form.role}
-              onChange={(e) => f('role', e.target.value as UserRole)} className={cls}>
-              {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Status</label>
-            <select id="select-add-status" value={form.status}
-              onChange={(e) => f('status', e.target.value as UserStatus)} className={cls}>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
             </select>
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">Area Detail</label>
+          <label className="block text-[13px] font-medium text-gray-900 mb-1.5">Area Detail</label>
           <input id="input-add-line1" type="text" value={form.line1}
-            onChange={(e) => f('line1', e.target.value)} placeholder="Flat / Building / Street" className={cls} />
+            onChange={(e) => f('line1', e.target.value)} placeholder="House/Flat No., Building Name, Street" className={cls} />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Pin Code</label>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">Pin Code</label>
             <input id="input-add-pincode" type="text" maxLength={6} value={form.pincode}
-              onChange={(e) => f('pincode', e.target.value)} placeholder="000000" className={cls} />
+              onChange={(e) => f('pincode', e.target.value)} placeholder="400001" className={cls} />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">City</label>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">City</label>
             <input id="input-add-city" type="text" value={form.city}
-              onChange={(e) => f('city', e.target.value)} placeholder="City" className={cls} />
+              onChange={(e) => f('city', e.target.value)} placeholder="Mumbai" className={cls} />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">State</label>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">State</label>
             <select id="select-add-state" value={form.state}
               onChange={(e) => f('state', e.target.value)} className={cls}>
+              <option value="" disabled>Select state</option>
               {STATES.map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Country</label>
+            <label className="block text-[13px] font-medium text-gray-900 mb-1.5">Country</label>
             <input id="input-add-country" type="text" value={form.country}
-              onChange={(e) => f('country', e.target.value)} className={cls} />
+              onChange={(e) => f('country', e.target.value)} className={`${cls} bg-white border-gray-200 focus:bg-white`} />
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-3 border-t border-gray-100">
-          <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-          <Button type="submit" variant="primary" id="btn-submit-add-user">Add User</Button>
+        <div className="flex justify-end gap-3 pt-6">
+          <button type="button" onClick={onClose} className="px-4 py-2 text-[13px] font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            Cancel
+          </button>
+          <button type="submit" id="btn-submit-add-user" className="px-4 py-2 text-[13px] font-medium text-white bg-[#2A3647] rounded-lg hover:bg-gray-800 transition-colors">
+            Add User
+          </button>
         </div>
       </form>
     </Modal>
