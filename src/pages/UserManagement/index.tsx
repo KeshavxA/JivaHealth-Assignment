@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users as UsersIcon, Star, UserCheck, Heart, Plus } from 'lucide-react';
+import { Users as UsersIcon, Plus } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
 import { UserCard } from './components/UserCard';
 import { AddUserModal } from './components/AddUserModal';

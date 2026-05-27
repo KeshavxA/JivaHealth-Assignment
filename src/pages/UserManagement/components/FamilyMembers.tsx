@@ -123,16 +123,13 @@ export function FamilyMembers({ user }: FamilyMembersProps) {
         <div className="space-y-4">
 
             <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-gray-800">
-                    Family Members
-                    <span className="ml-2 text-xs text-gray-400 font-normal">({liveUser.familyMembers.length})</span>
-                </h3>
+                <h3 className="text-[15px] font-semibold text-gray-800">Order History</h3>
                 <button
                     id="btn-add-member"
                     onClick={() => setAddOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 text-white text-xs font-semibold rounded-lg hover:bg-gray-800 transition-all"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-[#2D3748] text-white text-[13px] font-medium rounded-lg hover:bg-gray-800 transition-all"
                 >
-                    <Plus className="w-3.5 h-3.5" /> Add Member
+                    <Plus className="w-4 h-4" /> Add Member
                 </button>
             </div>
 
@@ -143,9 +140,9 @@ export function FamilyMembers({ user }: FamilyMembersProps) {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
                 {liveUser.familyMembers.map((m) => (
-                    <div key={m.id} id={`member-card-${m.id}`} className="bg-white border border-gray-200 rounded-2xl p-4">
+                    <div key={m.id} id={`member-card-${m.id}`} className="bg-gray-50/50 border border-gray-100 hover:border-gray-200 rounded-2xl p-4 transition-colors">
                         <div className="flex items-start gap-3">
 
                             <div
@@ -155,38 +152,38 @@ export function FamilyMembers({ user }: FamilyMembersProps) {
                             </div>
 
                             <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <p className="text-sm font-semibold text-gray-800 truncate">{m.name}</p>
+                                <div className="flex flex-col items-start gap-1">
+                                    <p className="text-[15px] font-semibold text-gray-900">{m.name}</p>
                                     <Badge variant="gray">{m.relation}</Badge>
                                 </div>
                                 {m.phone && (
-                                    <div className="flex items-center gap-1.5 mt-1.5">
-                                        <Phone className="w-3 h-3 text-gray-400" />
-                                        <span className="text-xs text-gray-600">{m.phone}</span>
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <Phone className="w-4 h-4 text-gray-400" />
+                                        <span className="text-[13px] text-gray-600">{m.phone}</span>
                                     </div>
                                 )}
                                 {m.dob && (
-                                    <div className="flex items-center gap-1.5 mt-1">
-                                        <Calendar className="w-3 h-3 text-gray-400" />
-                                        <span className="text-xs text-gray-600">{fmtDob(m.dob)}</span>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <Calendar className="w-4 h-4 text-gray-400" />
+                                        <span className="text-[13px] text-gray-600">{fmtDob(m.dob)}</span>
                                     </div>
                                 )}
                             </div>
 
-                            <div className="flex items-center gap-1 flex-shrink-0">
+                            <div className="flex items-center gap-2 flex-shrink-0 self-center">
                                 <button
                                     id={`btn-edit-member-${m.id}`}
                                     onClick={() => { setEditMember(m); setConfirmDeleteId(null); }}
-                                    className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors"
                                 >
-                                    <Pencil className="w-3.5 h-3.5" />
+                                    <Pencil className="w-4 h-4" />
                                 </button>
                                 <button
                                     id={`btn-delete-member-${m.id}`}
                                     onClick={() => setConfirmDeleteId(confirmDeleteId === m.id ? null : m.id)}
-                                    className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-gray-400 hover:text-[#DC2626] transition-colors"
+                                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-red-500 hover:bg-red-50 transition-colors"
                                 >
-                                    <Trash2 className="w-3.5 h-3.5" />
+                                    <Trash2 className="w-4 h-4" />
                                 </button>
                             </div>
                         </div>

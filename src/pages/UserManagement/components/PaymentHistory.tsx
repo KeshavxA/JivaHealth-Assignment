@@ -17,7 +17,7 @@ export function PaymentHistory({ user }: PaymentHistoryProps) {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-gray-800">Payment History</h3>
+      <h3 className="text-[15px] font-semibold text-gray-800 mb-4">Order History</h3>
       {liveUser.payments.length === 0 && (
         <div className="text-center py-12 text-gray-400 bg-white rounded-2xl border border-gray-200">
           <CreditCard className="w-8 h-8 mx-auto mb-2 opacity-40" />
@@ -28,29 +28,27 @@ export function PaymentHistory({ user }: PaymentHistoryProps) {
         <div
           key={payment.id}
           id={`payment-row-${payment.id}`}
-          className="bg-white border border-gray-200 rounded-2xl px-5 py-4 flex items-center gap-4"
+          className="bg-gray-50/50 border border-gray-100 hover:border-gray-200 rounded-2xl p-4 flex items-center gap-5 transition-colors"
         >
 
-          <div className="w-10 h-10 rounded-xl bg-[#F0FDF4] flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-[#D1FAE5] flex items-center justify-center flex-shrink-0">
             <CreditCard className="w-5 h-5 text-[#2D7A3A]" />
           </div>
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-sm font-semibold text-gray-800">{payment.paymentId}</span>
+            <div className="flex items-center gap-3 mb-1">
+              <span className="text-[15px] font-semibold text-gray-900">{payment.paymentId}</span>
               <Badge variant={paymentStatusVariant(payment.status)}>{payment.status}</Badge>
             </div>
-            <p className="text-xs text-gray-600">{payment.description}</p>
-            <div className="flex items-center gap-3 mt-0.5">
-              <p className="text-xs text-gray-400">{fmtDate(payment.date)}</p>
-              <span className="text-xs text-gray-400">•</span>
-              <p className="text-xs text-gray-500 font-medium">{payment.method}</p>
+            <p className="text-[13px] text-gray-600">{payment.description}</p>
+            <div className="flex items-center gap-4 mt-0.5">
+              <p className="text-[13px] text-gray-500">{fmtDate(payment.date)}</p>
+              <p className="text-[13px] font-bold text-gray-900">₹{payment.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
             </div>
           </div>
 
-          <div className="text-right flex-shrink-0">
-            <p className="text-sm font-bold text-gray-900">₹{payment.amount.toLocaleString('en-IN')}</p>
-            <p className="text-xs text-gray-400">{payment.method}</p>
+          <div className="text-right flex-shrink-0 px-2">
+            <p className="text-lg font-medium text-gray-900">₹ {payment.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
           </div>
         </div>
       ))}

@@ -16,7 +16,7 @@ interface FilterDropdownProps {
   icon?: boolean;
 }
 
-export function FilterDropdown({ label, value, options, onChange, id, className }: FilterDropdownProps) {
+export function FilterDropdown({ label, value, options, onChange, id, className, icon }: FilterDropdownProps) {
   return (
     <div className={clsx('relative inline-flex items-center gap-2', className)}>
       {label && (

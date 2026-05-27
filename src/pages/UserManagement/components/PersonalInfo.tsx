@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, Phone, Calendar, User as UserIcon, Droplets, Pencil, X, Check } from 'lucide-react';
+import { Mail, Phone, Calendar, User as UserIcon, Heart, Pencil, X, Check } from 'lucide-react';
 import { useUserStore } from '../../../store/useUserStore';
 import { Modal } from '../../../components/ui/Modal';
 import { Button } from '../../../components/ui/Button';
@@ -12,11 +12,10 @@ interface PersonalInfoProps {
 const BLOOD_GROUPS: BloodGroup[] = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 const GENDERS: Gender[] = ['Male', 'Female', 'Other'];
 
-const FIELD_ROW = 'flex items-start gap-3 py-3 border-b border-gray-100 last:border-0';
-const ICON_BOX = 'w-8 h-8 rounded-lg bg-[#F0FDF4] flex items-center justify-center flex-shrink-0 mt-0.5';
-const ICON_CLS = 'w-4 h-4 text-[#2D7A3A]';
-const LABEL_CLS = 'text-xs font-semibold text-[#2D7A3A] uppercase tracking-wide mb-0.5';
-const VAL_CLS = 'text-sm text-gray-800 font-medium';
+const FIELD_ROW = 'flex items-center gap-2 py-2.5';
+const ICON_CLS = 'w-[18px] h-[18px] text-[#2D7A3A]';
+const LABEL_CLS = 'text-[13px] text-[#2D7A3A] w-24';
+const VAL_CLS = 'text-[13px] text-gray-900 font-medium';
 const INPUT_CLS =
   'text-sm border border-gray-200 rounded-lg px-3 py-2 text-gray-900 w-full ' +
   'focus:outline-none focus:ring-2 focus:ring-[#2D7A3A]/20 focus:border-[#2D7A3A]';
@@ -67,65 +66,46 @@ export function PersonalInfo({ user }: PersonalInfoProps) {
           <button
             id="btn-edit-personal-info"
             onClick={openEdit}
-            className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-[#2D7A3A] transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            <Pencil className="w-3.5 h-3.5" /> Edit
+            <Pencil className="w-3.5 h-3.5 text-gray-500" /> Edit
           </button>
         </div>
 
-        <div className="divide-y divide-gray-100">
+        <div className="mt-2 space-y-1">
 
           <div className={FIELD_ROW}>
-            <div className={ICON_BOX}><UserIcon className={ICON_CLS} /></div>
-            <div className="flex-1">
-              <p className={LABEL_CLS}>Full Name</p>
-              <p className={VAL_CLS}>{user.name}</p>
-            </div>
+            <Mail className={ICON_CLS} />
+            <p className={LABEL_CLS}>Email:</p>
+            <p className={VAL_CLS}>{user.email}</p>
           </div>
 
           <div className={FIELD_ROW}>
-            <div className={ICON_BOX}><Mail className={ICON_CLS} /></div>
-            <div className="flex-1">
-              <p className={LABEL_CLS}>Email</p>
-              <p className={VAL_CLS}>{user.email}</p>
-            </div>
+            <Phone className={ICON_CLS} />
+            <p className={LABEL_CLS}>Phone:</p>
+            <p className={VAL_CLS}>{user.phone}</p>
           </div>
 
           <div className={FIELD_ROW}>
-            <div className={ICON_BOX}><Phone className={ICON_CLS} /></div>
-            <div className="flex-1">
-              <p className={LABEL_CLS}>Phone</p>
-              <p className={VAL_CLS}>{user.phone}</p>
-            </div>
+            <Calendar className={ICON_CLS} />
+            <p className={LABEL_CLS}>Date of Birth:</p>
+            <p className={VAL_CLS}>{fmtDob(user.dob)}</p>
           </div>
 
           <div className={FIELD_ROW}>
-            <div className={ICON_BOX}><Calendar className={ICON_CLS} /></div>
-            <div className="flex-1">
-              <p className={LABEL_CLS}>Date of Birth</p>
-              <p className={VAL_CLS}>{fmtDob(user.dob)}</p>
-            </div>
+            <UserIcon className={ICON_CLS} />
+            <p className={LABEL_CLS}>Gender:</p>
+            <p className={VAL_CLS}>{user.gender}</p>
           </div>
 
           <div className={FIELD_ROW}>
-            <div className={ICON_BOX}><UserIcon className={ICON_CLS} /></div>
-            <div className="flex-1">
-              <p className={LABEL_CLS}>Gender</p>
-              <p className={VAL_CLS}>{user.gender}</p>
-            </div>
-          </div>
-
-          <div className={FIELD_ROW}>
-            <div className={ICON_BOX}><Droplets className={ICON_CLS} /></div>
-            <div className="flex-1">
-              <p className={LABEL_CLS}>Blood Group</p>
-              <p className={VAL_CLS}>{user.bloodGroup}</p>
-            </div>
+            <Heart className={ICON_CLS} />
+            <p className={LABEL_CLS}>Blood Group:</p>
+            <p className={VAL_CLS}>{user.bloodGroup}</p>
           </div>
         </div>
       </div>
 
-      {/* Edit Modal */}
       <Modal
         isOpen={editOpen}
         onClose={() => setEditOpen(false)}

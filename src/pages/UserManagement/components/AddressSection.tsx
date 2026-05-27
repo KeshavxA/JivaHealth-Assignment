@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Home, Plus, Pencil, Trash2, X, Check, AlertTriangle } from 'lucide-react';
 import { useUserStore } from '../../../store/useUserStore';
-import { Badge } from '../../../components/ui/Badge';
 import type { User, Address } from '../../../types';
 
 interface AddressSectionProps {
@@ -100,7 +99,6 @@ function AddressForm({
   );
 }
 
-/** Inline confirm bar — replaces the action buttons temporarily */
 function DeleteConfirm({ label, onConfirm, onCancel }: { label: string; onConfirm: () => void; onCancel: () => void }) {
   return (
     <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-xs animate-in fade-in duration-150">
@@ -125,18 +123,17 @@ export function AddressSection({ user }: AddressSectionProps) {
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-5">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-gray-800">Addresses</h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-[15px] font-semibold text-gray-800">Addresses</h3>
         <button
           id="btn-add-address"
           onClick={() => { setShowAddForm(true); setEditId(null); }}
-          className="flex items-center gap-1 text-xs font-medium text-[#2D7A3A] hover:underline"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
         >
-          <Plus className="w-3.5 h-3.5" /> Add
+          <Plus className="w-3.5 h-3.5 text-gray-500" /> Add
         </button>
       </div>
 
-      {/* Add form */}
       {showAddForm && (
         <AddressForm
           initial={BLANK_FORM}
@@ -145,45 +142,47 @@ export function AddressSection({ user }: AddressSectionProps) {
         />
       )}
 
-      {/* Address list */}
       <div className="space-y-3 mt-2">
         {user.addresses.length === 0 && (
           <p className="text-xs text-gray-400 text-center py-4">No addresses added.</p>
         )}
         {user.addresses.map((addr) => (
           <div key={addr.id}>
-            <div className="flex items-start gap-3 p-3 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors">
-              <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <Home className="w-4 h-4 text-gray-500" />
+            <div className="flex items-start gap-4 p-4 rounded-xl bg-gray-50/50 mb-3 border border-gray-100 hover:border-gray-200 transition-colors">
+              <div className="w-10 h-10 rounded-lg bg-[#A7D8C4] bg-opacity-60 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Home className="w-5 h-5 text-[#2D7A3A]" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <Badge variant="blue">{addr.type}</Badge>
-                  {addr.isDefault && <Badge variant="green">Default</Badge>}
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[15px] font-medium text-gray-900">{addr.type}</span>
+                  {addr.isDefault && (
+                    <span className="text-[11px] font-medium text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded-full">
+                      Default
+                    </span>
+                  )}
                 </div>
-                <p className="text-xs text-gray-700">{addr.line1}</p>
-                <p className="text-xs text-gray-500">{addr.city}, {addr.state} – {addr.pincode}</p>
-                <p className="text-xs text-gray-400">{addr.country}</p>
+                <p className="text-[13px] text-gray-600 mt-1">{addr.line1}</p>
+                <p className="text-[13px] text-gray-600 mt-0.5">{addr.city}, {addr.state} {addr.pincode}</p>
+                <p className="text-[13px] text-gray-600 mt-0.5">{addr.country}</p>
               </div>
-              <div className="flex items-center gap-1 flex-shrink-0">
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <button
                   id={`btn-edit-addr-${addr.id}`}
                   onClick={() => { setEditId(editId === addr.id ? null : addr.id); setConfirmDeleteId(null); }}
-                  className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors"
                 >
-                  <Pencil className="w-3.5 h-3.5" />
+                  <Pencil className="w-4 h-4" />
                 </button>
                 <button
                   id={`btn-delete-addr-${addr.id}`}
                   onClick={() => { setConfirmDeleteId(addr.id); setEditId(null); }}
-                  className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-gray-400 hover:text-[#DC2626] transition-colors"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-red-500 hover:bg-red-50 transition-colors"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
-            {/* Inline delete confirm */}
             {confirmDeleteId === addr.id && (
               <div className="mt-1.5">
                 <DeleteConfirm
@@ -194,7 +193,6 @@ export function AddressSection({ user }: AddressSectionProps) {
               </div>
             )}
 
-            {/* Inline edit form */}
             {editId === addr.id && (
               <AddressForm
                 initial={{ type: addr.type, isDefault: addr.isDefault, line1: addr.line1, city: addr.city, state: addr.state, pincode: addr.pincode, country: addr.country }}

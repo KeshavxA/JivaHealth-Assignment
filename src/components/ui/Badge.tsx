@@ -62,7 +62,7 @@ export function tierVariant(tier: string): BadgeVariant {
   return tier === 'Prime User' ? 'yellow' : 'outlined';
 }
 
-export function roleVariant(role: string): BadgeVariant {
+export function roleVariant(_role: string): BadgeVariant {
   return 'gray';
 }
 
