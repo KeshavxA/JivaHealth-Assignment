@@ -2,7 +2,7 @@ export type UserRole = 'Patient' | 'Nurse' | 'Doctor' | 'Support Staff';
 export type UserStatus = 'Active' | 'Inactive';
 export type UserTier = 'Normal User' | 'Prime User';
 export type BloodGroup = 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-';
-export type Gender = 'Male' | 'Female' | 'Other';
+export type Gender = 'Male' | 'Female' | 'Other' | '13-17 years' | '18-35 years' | '36-59 years' | '60+ years';
 
 export interface Address {
   id: string;

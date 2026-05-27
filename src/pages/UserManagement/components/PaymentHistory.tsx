@@ -1,6 +1,6 @@
 import { CreditCard } from 'lucide-react';
 import { useUserStore } from '../../../store/useUserStore';
-import { Badge } from '../../../components/ui/Badge';
+import { Badge, paymentStatusVariant } from '../../../components/ui/Badge';
 import type { User } from '../../../types';
 
 interface PaymentHistoryProps {
@@ -38,7 +38,7 @@ export function PaymentHistory({ user }: PaymentHistoryProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
               <span className="text-sm font-semibold text-gray-800">{payment.paymentId}</span>
-              <Badge variant={payment.status} />
+              <Badge variant={paymentStatusVariant(payment.status)}>{payment.status}</Badge>
             </div>
             <p className="text-xs text-gray-600">{payment.description}</p>
             <div className="flex items-center gap-3 mt-0.5">

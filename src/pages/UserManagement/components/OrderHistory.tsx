@@ -1,6 +1,6 @@
 import { ShoppingBag, Trash2, ChevronDown } from 'lucide-react';
 import { useUserStore } from '../../../store/useUserStore';
-import { Badge } from '../../../components/ui/Badge';
+import { Badge, orderStatusVariant } from '../../../components/ui/Badge';
 import type { User, Order } from '../../../types';
 
 interface OrderHistoryProps {
@@ -50,7 +50,7 @@ export function OrderHistory({ user }: OrderHistoryProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
               <span className="text-sm font-semibold text-gray-800">{order.orderId}</span>
-              <Badge variant={order.status} />
+              <Badge variant={orderStatusVariant(order.status)}>{order.status}</Badge>
             </div>
             <p className="text-xs text-gray-600 truncate">{order.items}</p>
             <p className="text-xs text-gray-400 mt-0.5">{fmtDate(order.date)}</p>

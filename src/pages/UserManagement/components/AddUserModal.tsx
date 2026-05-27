@@ -25,7 +25,7 @@ const cls = 'w-full px-3 py-2 text-sm border border-gray-200 rounded-lg text-gra
 
 const INITIAL = {
   name: '', email: '', phone: '', dob: '',
-  gender: 'Female' as Gender, bloodGroup: 'O+' as BloodGroup,
+  gender: 'Male' as Gender, bloodGroup: 'O+' as BloodGroup,
   role: 'Patient' as UserRole, status: 'Active' as UserStatus,
   tier: 'Normal User' as UserTier,
   line1: '', pincode: '', city: '', state: 'Maharashtra', country: 'India',
@@ -102,6 +102,11 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
+              <option disabled>──────────</option>
+              <option value="13-17 years">13–17 years</option>
+              <option value="18-35 years">18–35 years</option>
+              <option value="36-59 years">36–59 years</option>
+              <option value="60+ years">60+ years</option>
             </select>
           </div>
 

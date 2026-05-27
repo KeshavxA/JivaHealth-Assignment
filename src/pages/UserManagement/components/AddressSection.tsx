@@ -106,7 +106,6 @@ export function AddressSection({ user }: AddressSectionProps) {
         </button>
       </div>
 
-      {/* Add form */}
       {showAddForm && (
         <AddressForm
           initial={BLANK_FORM}
@@ -118,7 +117,6 @@ export function AddressSection({ user }: AddressSectionProps) {
         />
       )}
 
-      {/* Address list */}
       <div className="space-y-3 mt-2">
         {user.addresses.length === 0 && (
           <p className="text-xs text-gray-400 text-center py-4">No addresses added.</p>
@@ -131,8 +129,8 @@ export function AddressSection({ user }: AddressSectionProps) {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <Badge variant={addr.type} />
-                  {addr.isDefault && <Badge variant="Default" label="Default" />}
+                  <Badge variant="blue">{addr.type}</Badge>
+                  {addr.isDefault && <Badge variant="green">Default</Badge>}
                 </div>
                 <p className="text-xs text-gray-700">{addr.line1}</p>
                 <p className="text-xs text-gray-500">{addr.city}, {addr.state} – {addr.pincode}</p>

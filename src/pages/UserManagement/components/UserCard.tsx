@@ -1,7 +1,7 @@
 
 import { useNavigate } from 'react-router-dom';
 import { Mail, Phone, Calendar, Eye, Pencil, Crown } from 'lucide-react';
-import { Badge } from '../../../components/ui/Badge';
+import { Badge, statusVariant, roleVariant, tierVariant } from '../../../components/ui/Badge';
 import { Avatar } from '../../../components/ui/Avatar';
 import type { User } from '../../../types';
 
@@ -34,12 +34,14 @@ export function UserCard({ user, onEdit, onUpgrade }: UserCardProps) {
       <div className="w-[180px] flex-shrink-0">
         <p className="font-semibold text-gray-900 text-sm leading-tight truncate">{user.name}</p>
         <div className="flex items-center gap-1 mt-1 flex-wrap">
-          <Badge variant={user.role} />
+          <Badge variant={roleVariant(user.role)}>{user.role}</Badge>
         </div>
         <div className="flex items-center gap-1 mt-1 flex-wrap">
-          <Badge variant={user.status} dot />
+          <Badge variant={statusVariant(user.status)} dot>{user.status}</Badge>
         </div>
-        <p className="text-xs text-gray-400 mt-1">{user.tier}</p>
+        <p className="text-xs text-gray-400 mt-1">
+          <Badge variant={tierVariant(user.tier)}>{user.tier}</Badge>
+        </p>
       </div>
 
       <div className="flex-1 min-w-0 space-y-1">
@@ -89,7 +91,7 @@ export function UserCard({ user, onEdit, onUpgrade }: UserCardProps) {
         <div className="flex items-center gap-2">
           <button
             id={`btn-view-${user.id}`}
-            onClick={() => navigate(`/users/${user.id}`)}
+            onClick={() => navigate(`/user-management/${user.id}`)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700
               border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all"
           >
