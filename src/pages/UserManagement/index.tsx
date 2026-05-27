@@ -36,10 +36,10 @@ export function Users() {
     );
 
     const STAT_CARDS = [
-        { label: 'Total User', value: stats.total, icon: <UsersIcon className="w-5 h-5" />, bg: 'bg-green-50', color: 'text-green-600' },
-        { label: 'Prime User', value: stats.prime, icon: <Star className="w-5 h-5" />, bg: 'bg-amber-50', color: 'text-amber-600' },
-        { label: 'Non-Prime User', value: stats.nonPrime, icon: <UserCheck className="w-5 h-5" />, bg: 'bg-blue-50', color: 'text-blue-600' },
-        { label: 'Total Family Members', value: stats.totalFamilyMembers, icon: <Heart className="w-5 h-5" />, bg: 'bg-purple-50', color: 'text-purple-600' },
+        { label: 'Total User', value: stats.total, color: 'text-gray-900' },
+        { label: 'Prime User', value: stats.prime, color: 'text-[#2D7A3A]' },
+        { label: 'Non-Prime User', value: stats.nonPrime, color: 'text-[#2D7A3A]' },
+        { label: 'Total Family members', value: stats.totalFamilyMembers, color: 'text-[#2D7A3A]' },
     ];
 
     return (
@@ -62,15 +62,10 @@ export function Users() {
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                {STAT_CARDS.map(({ label, value, icon, bg, color }) => (
-                    <div key={label} className="bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-4">
-                        <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${bg} ${color}`}>
-                            {icon}
-                        </div>
-                        <div>
-                            <p className="text-xs text-gray-500">{label}</p>
-                            <p className="text-2xl font-bold text-[#2D7A3A]">{value}</p>
-                        </div>
+                {STAT_CARDS.map(({ label, value, color }) => (
+                    <div key={label} className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col justify-center">
+                        <p className="text-[13px] text-gray-500 font-medium mb-1">{label}</p>
+                        <p className={`text-[28px] font-semibold leading-none ${color}`}>{value}</p>
                     </div>
                 ))}
             </div>
@@ -80,7 +75,7 @@ export function Users() {
                     id="input-user-search"
                     value={searchQuery}
                     onChange={setSearchQuery}
-                    placeholder="Search by name, email or phone..."
+                    placeholder="Search by patient, doctor, or specialty..."
                     className="flex-1"
                 />
                 <FilterDropdown
@@ -88,12 +83,14 @@ export function Users() {
                     value={statusFilter}
                     options={STATUS_OPTIONS}
                     onChange={(v) => setStatusFilter(v as 'All' | 'Active' | 'Inactive')}
+                    icon
                 />
                 <FilterDropdown
                     id="filter-role"
                     value={roleFilter}
                     options={ROLE_OPTIONS}
                     onChange={setRoleFilter}
+                    icon
                 />
             </div>
 

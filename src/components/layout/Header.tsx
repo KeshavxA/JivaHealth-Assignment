@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, Search, Moon, Bell, Sun } from 'lucide-react';
+import { PanelLeft, Search, Moon, Bell, Sun } from 'lucide-react';
 
 interface HeaderProps {
     onToggleSidebar?: () => void;
@@ -18,7 +18,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors flex-shrink-0"
                 aria-label="Toggle sidebar"
             >
-                <Menu className="w-5 h-5" />
+                <PanelLeft className="w-5 h-5" />
             </button>
 
             <div className="flex-1 flex justify-center">
@@ -29,8 +29,8 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                         type="text"
                         value={searchVal}
                         onChange={(e) => setSearchVal(e.target.value)}
-                        placeholder="Search..."
-                        className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl
+                        placeholder="Search"
+                        className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-xl
               text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D7A3A]/20
               focus:border-[#2D7A3A] transition-all"
                     />
