@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PanelLeft, Search, Moon, Bell, Sun } from 'lucide-react';
 
 interface HeaderProps {
@@ -8,6 +8,14 @@ interface HeaderProps {
 export function Header({ onToggleSidebar }: HeaderProps) {
     const [darkMode, setDarkMode] = useState(false);
     const [searchVal, setSearchVal] = useState('');
+
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [darkMode]);
 
     return (
         <header className="sticky top-0 z-20 bg-white border-b border-gray-200 h-14 flex items-center gap-4 px-6">
