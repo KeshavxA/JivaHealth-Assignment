@@ -13,10 +13,10 @@ interface ModalProps {
 }
 
 const SIZE_CLASSES = {
-  sm: 'max-w-sm',
-  md: 'max-w-md',
-  lg: 'max-w-lg',
-  xl: 'max-w-2xl',
+  sm: 'sm:max-w-sm',
+  md: 'sm:max-w-md',
+  lg: 'sm:max-w-lg',
+  xl: 'sm:max-w-2xl',
 };
 
 export function Modal({ isOpen, onClose, title, children, size = 'md', id }: ModalProps) {
@@ -30,11 +30,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', id }: Mod
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
@@ -42,14 +38,14 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', id }: Mod
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4"
       aria-modal="true"
       role="dialog"
       aria-labelledby="modal-title"
     >
 
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
 
@@ -57,13 +53,19 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', id }: Mod
         id={id}
         ref={dialogRef}
         className={clsx(
-          'relative w-full bg-white rounded-2xl shadow-2xl border border-gray-200 animate-fade-in overflow-hidden',
-          SIZE_CLASSES[size]
+
+          'relative w-full bg-white shadow-2xl border border-gray-200 overflow-hidden',
+
+          'rounded-t-2xl sm:rounded-2xl',
+
+          SIZE_CLASSES[size],
+
+          'animate-slide-up sm:animate-fade-in',
         )}
       >
 
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 id="modal-title" className="text-lg font-semibold text-gray-900">{title}</h2>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <h2 id="modal-title" className="text-base sm:text-lg font-semibold text-gray-900">{title}</h2>
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
@@ -73,7 +75,8 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', id }: Mod
           </button>
         </div>
 
-        <div className="px-6 py-5 overflow-y-auto max-h-[80vh]">
+
+        <div className="px-5 py-5 overflow-y-auto max-h-[80vh] sm:max-h-[78vh]">
           {children}
         </div>
       </div>

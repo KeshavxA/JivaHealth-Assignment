@@ -91,7 +91,7 @@ export function UserDetails() {
     ];
 
     return (
-        <div className="p-6 space-y-5 max-w-6xl mx-auto">
+        <div className="p-4 sm:p-6 space-y-5 max-w-6xl mx-auto">
 
             <button
                 id="btn-back"
@@ -102,8 +102,8 @@ export function UserDetails() {
                 Back to User Management
             </button>
 
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                <div className="flex items-start gap-5">
+            <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-5">
 
                     <Avatar name={user.name} size="xl" shape="circle" statusDot={user.status === 'Active' ? 'active' : 'inactive'} />
 
@@ -184,7 +184,7 @@ export function UserDetails() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {metricCards.map(({ label, value, icon, bg }) => (
                     <div key={label} className="bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-3">
                         <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${bg}`}>
@@ -222,7 +222,7 @@ export function UserDetails() {
 
                 <div className="p-5">
                     {activeTab === 'overview' && (
-                        <div className="grid grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <PersonalInfo user={user} />
                             <AddressSection user={user} />
                         </div>

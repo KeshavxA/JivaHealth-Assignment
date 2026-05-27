@@ -42,7 +42,7 @@ export function Users() {
     ];
 
     return (
-        <div className="p-6 space-y-5">
+        <div className="p-4 sm:p-6 space-y-5">
 
             <div className="flex items-start justify-between">
                 <div>
@@ -59,7 +59,7 @@ export function Users() {
                 </button>
             </div>
 
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {STAT_CARDS.map(({ label, value, icon, bg, color }) => (
                     <div key={label} className="bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-4">
                         <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${bg} ${color}`}>
@@ -73,7 +73,7 @@ export function Users() {
                 ))}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <SearchBar
                     id="input-user-search"
                     value={searchQuery}
