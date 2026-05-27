@@ -7,6 +7,7 @@ import {
 import { useUserStore } from '../../store/useUserStore';
 import { Avatar } from '../../components/ui/Avatar';
 import { Badge, statusVariant, roleVariant, tierVariant } from '../../components/ui/Badge';
+import { PageWrapper } from '../../components/ui/PageWrapper';
 import { PersonalInfo } from './components/PersonalInfo';
 import { AddressSection } from './components/AddressSection';
 import { OrderHistory } from './components/OrderHistory';
@@ -91,6 +92,7 @@ export function UserDetails() {
     ];
 
     return (
+        <PageWrapper>
         <div className="p-4 sm:p-6 space-y-5 max-w-6xl mx-auto">
 
             <button
@@ -233,5 +235,6 @@ export function UserDetails() {
                 </div>
             </div>
         </div>
+        </PageWrapper>
     );
 }

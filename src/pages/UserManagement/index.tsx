@@ -6,6 +6,7 @@ import { AddUserModal } from './components/AddUserModal';
 import { EditUserModal } from './components/EditUserModal';
 import { SearchBar } from '../../components/ui/SearchBar';
 import { FilterDropdown } from '../../components/ui/FilterDropdown';
+import { PageWrapper } from '../../components/ui/PageWrapper';
 import type { User } from '../../types';
 
 const STATUS_OPTIONS = [
@@ -42,6 +43,7 @@ export function Users() {
     ];
 
     return (
+        <PageWrapper>
         <div className="p-4 sm:p-6 space-y-5">
 
             <div className="flex items-start justify-between">
@@ -126,5 +128,6 @@ export function Users() {
                 />
             )}
         </div>
+        </PageWrapper>
     );
 }

@@ -183,7 +183,8 @@ export const useUserStore = create<UserStore>((set, get) => ({
       total: users.length,
       prime: users.filter((u) => u.tier === 'Prime User').length,
       nonPrime: users.filter((u) => u.tier === 'Normal User').length,
-      totalFamilyMembers: users.reduce((sum, u) => sum + u.totalFamilyMembers, 0),
+      // Derive from actual arrays — always accurate even after add/delete
+      totalFamilyMembers: users.reduce((sum, u) => sum + u.familyMembers.length, 0),
     };
   },
 }));
