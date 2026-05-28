@@ -1,6 +1,8 @@
-import { ShoppingBag, Trash2, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+import { ShoppingBag, Trash2, ChevronDown, Eye } from 'lucide-react';
 import { useUserStore } from '../../../store/useUserStore';
 import { Badge, orderStatusVariant } from '../../../components/ui/Badge';
+import { OrderDetailModal } from './OrderDetailModal';
 import type { User, Order } from '../../../types';
 
 interface OrderHistoryProps {
@@ -14,8 +16,8 @@ function fmtDate(d: string) {
 }
 
 export function OrderHistory({ user }: OrderHistoryProps) {
-  const { updateOrderStatus } = useUserStore();
-  const { updateUser, users } = useUserStore();
+  const { updateOrderStatus, updateUser, users } = useUserStore();
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const deleteOrder = (orderId: string) => {
     const freshUser = users.find((u) => u.id === user.id);
@@ -47,9 +49,15 @@ export function OrderHistory({ user }: OrderHistoryProps) {
             <ShoppingBag className="w-5 h-5 text-[#2D7A3A]" />
           </div>
 
-          <div className="flex-1 min-w-0">
+          <div
+            className="flex-1 min-w-0 cursor-pointer"
+            onClick={() => setSelectedOrder(order)}
+            title="Click to view details"
+          >
             <div className="flex items-center gap-3 mb-1">
-              <span className="text-[15px] font-semibold text-gray-900">{order.orderId}</span>
+              <span className="text-[15px] font-semibold text-gray-900 group-hover:text-[#2D7A3A] transition-colors">
+                {order.orderId}
+              </span>
               <Badge variant={orderStatusVariant(order.status)}>{order.status}</Badge>
             </div>
             <p className="text-[13px] text-gray-600 truncate">{order.items}</p>
@@ -63,6 +71,7 @@ export function OrderHistory({ user }: OrderHistoryProps) {
             <select
               id={`select-order-status-${order.id}`}
               value={order.status}
+              onClick={(e) => e.stopPropagation()}
               onChange={(e) => updateOrderStatus(user.id, order.id, e.target.value as Order['status'])}
               className="appearance-none pl-4 pr-9 py-2 text-[13px] font-medium border border-gray-200 rounded-lg
                 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2D7A3A]/20 cursor-pointer bg-white"
@@ -75,14 +84,29 @@ export function OrderHistory({ user }: OrderHistoryProps) {
           </div>
 
           <button
+            id={`btn-view-order-${order.id}`}
+            onClick={(e) => { e.stopPropagation(); setSelectedOrder(order); }}
+            className="w-[34px] h-[34px] flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors flex-shrink-0"
+            title="View Details"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+
+          <button
             id={`btn-delete-order-${order.id}`}
-            onClick={() => deleteOrder(order.id)}
+            onClick={(e) => { e.stopPropagation(); deleteOrder(order.id); }}
             className="w-[34px] h-[34px] flex items-center justify-center rounded-lg bg-white border border-red-100 text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
           >
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
       ))}
+      <OrderDetailModal 
+        order={selectedOrder}
+        user={liveUser}
+        isOpen={!!selectedOrder}
+        onClose={() => setSelectedOrder(null)}
+      />
     </div>
   );
 }
